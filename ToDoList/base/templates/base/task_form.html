@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1> Task Form</h1>
-
+    <a href="{% url 'tasks' %}">GO back</a>
     <form method="POST" action="">
         {% csrf_token %}
         {{form.as_p}}

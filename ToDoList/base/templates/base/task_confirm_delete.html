@@ -6,7 +6,7 @@
     <title>Delete</title>
 </head>
 <body>
-    <a href="{% url 'tasks' %}"></a>
+    <a href="{% url 'tasks' %}">Go Back</a>
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}

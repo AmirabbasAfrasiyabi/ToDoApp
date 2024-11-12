@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView , UpdateView , DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView , LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from .models import Task  
 
@@ -19,30 +20,30 @@ class CustomLoginViews(LoginView):
     def get_success_url(self):
         return reverse_lazy('tasks')
 
-class TaskList(ListView):
+class TaskList(LoginRequiredMixin,ListView):
     model = Task
     template_name = 'task_list.html'
     context_object_name = 'task'
 
-class TaskDetailView(DetailView):
+class TaskDetailView(LoginRequiredMixin,DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'base/task.html'
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin,CreateView):
     model = Task
     fields= '__all__'
     success_url = reverse_lazy('tasks')
     
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin,UpdateView):
     model = Task
     fields= '__all__'
     success_url = reverse_lazy('tasks')
     
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin,DeleteView):
     model = Task
     fields= '__all__'
     context_object_name = 'task'

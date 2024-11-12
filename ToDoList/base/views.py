@@ -4,8 +4,12 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView , UpdateView , DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView , LogoutView
+from django.shortcuts import redirect
 from .models import Task  
+
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy('login')
 
 class CustomLoginViews(LoginView):
     template_name = 'base/login.html'

@@ -29,6 +29,11 @@ class RegisterPage(FormView):
     redirect_authenticated_user = True
     success_url = reverse_lazy('tasks')
 
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super(RegisterPage, self).form_valid(form)
+
 
 class TaskList(LoginRequiredMixin, ListView):
     model = Task
@@ -36,10 +41,17 @@ class TaskList(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        
         context['tasks'] = context['tasks'].filter(user=self.request.user)
         context['count'] = context['tasks'].filter(complete=False).count()
+
+        search_input = self.request.GET.get('search_area') or ''
+        if search_input:
+            context['tasks'] = context['tasks'].filter(title__icontains=search_input)
+        context['search_input'] = search_input
+
         return context
+
 
 class TaskDetailView(LoginRequiredMixin,DetailView):
     model = Task
@@ -52,7 +64,7 @@ class TaskCreateView(LoginRequiredMixin,CreateView):
     fields = ['title', 'description', 'complete'] 
     success_url = reverse_lazy('tasks')
 
-    def form_invalid(self, form):
+    def form_valid(self, form):
         form.instance.user = self.request.user
         return super(TaskCreateView, self).form_valid(form)
     

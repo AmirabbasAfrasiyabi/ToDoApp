@@ -21,6 +21,11 @@
 <h1> To do App List {{ color }}</h1>
 <a href="{% url 'task-create' %}">Add Task</a>
 
+<form method="GET">
+    <input type="text" name="search_area" placeholder="Search tasks" value="{% if request.GET.search_area %}{{ request.GET.search_area }}{% endif %}">
+    <input type="submit" value="Search">
+</form>
+
 <table>
     <tr>
         <th>Item</th>
